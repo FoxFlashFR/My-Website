@@ -73,102 +73,81 @@ nav button:hover::after { left:100%; }
 
 <script>
 let isAdmin = prompt('Mot de passe admin') === 'Foxynisol93';
-let cartCollapsed = false;
-
-function toggleCart(){
-  const cart = document.getElementById('cart');
-  cartCollapsed = !cartCollapsed;
-  if(cartCollapsed){
-    cart.classList.add('collapsed');
-    document.getElementById('cart-toggle').textContent = '⬇️';
-  } else {
-    cart.classList.remove('collapsed');
-    document.getElementById('cart-toggle').textContent = '⬆️';
-  }
-}
-
-let defaultProducts = [
-{name:'Ryzen 5 5600',price:180,category:'cpu',img:'https://via.placeholder.com/200?text=5600'},
-{name:'Ryzen 7 7800X3D',price:500,category:'cpu',img:'https://via.placeholder.com/200?text=7800X3D'},
-{name:'RTX 5070',price:900,category:'gpu',img:'https://via.placeholder.com/200?text=RTX5070'},
-{name:'Corsair DDR5 2x16',price:250,category:'ram',img:'https://via.placeholder.com/200?text=DDR5'},
-{name:'Corsair 4000D Airflow',price:110,category:'case',img:'https://via.placeholder.com/200?text=4000D'},
-{name:'Lian Li O11 Dynamic',price:140,category:'case',img:'https://via.placeholder.com/200?text=O11'},
-{name:'Fractal Meshify C',price:100,category:'case',img:'https://via.placeholder.com/200?text=Meshify+C'},
-{name:'Corsair 750W',price:120,category:'psu',img:'https://via.placeholder.com/200?text=750W'},
-{name:'Noctua NH-D15',price:100,category:'aircooler',img:'https://via.placeholder.com/200?text=NH-D15'},
-{name:'Be Quiet Dark Rock Pro 4',price:90,category:'aircooler',img:'https://via.placeholder.com/200?text=Dark+Rock+4'},
-{name:'Cooler Master Hyper 212',price:40,category:'aircooler',img:'https://via.placeholder.com/200?text=Hyper+212'},
-{name:'Corsair H100i RGB',price:130,category:'watercooling',img:'https://via.placeholder.com/200?text=H100i'},
-{name:'NZXT Kraken X63',price:160,category:'watercooling',img:'https://via.placeholder.com/200?text=Kraken+X63'},
-{name:'MSI CoreLiquid 360R',price:180,category:'watercooling',img:'https://via.placeholder.com/200?text=360R'}
-];
-
-let stored = JSON.parse(localStorage.getItem('products')) || [];
-let products = [...stored];
-defaultProducts.forEach(p=>{if(!stored.some(sp=>sp.name===p.name)) products.push(p);});
-localStorage.setItem('products',JSON.stringify(products));
-
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let products = [];
+
+// Charger les produits depuis products.json
+fetch('products.json')
+  .then(res => res.json())
+  .then(data => {
+    products = data;
+    displayProducts(products);
+  })
+  .catch(err => console.error('Erreur chargement products.json', err));
 
 function displayProducts(list){
-let html='';
-list.forEach((p,i)=>{
-html+=`<div class='product'>
-<img src='${p.img}' onclick="edit(${i},'img')">
-<h3>${p.name}</h3>
-<p onclick="edit(${i},'price')">€${p.price}</p>
-<button onclick="add(${i})">🛒 Ajouter</button>
-</div>`
-});
-document.getElementById('products').innerHTML=html;
+  let html='';
+  list.forEach((p,i)=>{
+    html+=`<div class='product'>
+      <img src='${p.img}' onclick="edit(${i},'img')">
+      <h3>${p.name}</h3>
+      <p onclick="edit(${i},'price')">€${p.price}</p>
+      <button onclick="add(${i})">🛒 Ajouter</button>
+    </div>`;
+  });
+  document.getElementById('products').innerHTML=html;
 }
 
 function edit(i,type){
-if(!isAdmin) return;
-let val=prompt('Nouvelle valeur');
-if(type==='price') products[i].price=parseFloat(val)||products[i].price;
-if(type==='img') products[i].img=val||products[i].img;
-localStorage.setItem('products',JSON.stringify(products));
-displayProducts(products);
+  if(!isAdmin) return;
+  let val = prompt('Nouvelle valeur');
+  if(type==='price') products[i].price = parseFloat(val)||products[i].price;
+  if(type==='img') products[i].img = val||products[i].img;
+  displayProducts(products);
 }
 
 function filterCategory(cat){
-displayProducts(cat==='all'?products:products.filter(p=>p.category===cat));
+  displayProducts(cat==='all'?products:products.filter(p=>p.category===cat));
 }
 
 function add(i){
-cart.push(products[i]);
-localStorage.setItem('cart',JSON.stringify(cart));
-renderCart();
+  cart.push(products[i]);
+  localStorage.setItem('cart',JSON.stringify(cart));
+  renderCart();
 }
 
 function remove(i){
-cart.splice(i,1);
-localStorage.setItem('cart',JSON.stringify(cart));
-renderCart();
+  cart.splice(i,1);
+  localStorage.setItem('cart',JSON.stringify(cart));
+  renderCart();
 }
 
 function renderCart(){
-let html=''; let total=0;
-cart.forEach((c,i)=>{total+=c.price; html+=`<div class='cart-item'>${c.name}<button onclick='remove(${i})'>X</button></div>`});
-document.getElementById('cart-items').innerHTML=html;
-document.getElementById('total').innerText=total;
+  let html=''; let total=0;
+  cart.forEach((c,i)=>{total+=c.price; html+=`<div class='cart-item'>${c.name}<button onclick='remove(${i})'>X</button></div>`});
+  document.getElementById('cart-items').innerHTML=html;
+  document.getElementById('total').innerText=total;
 }
 
 function payment(){
-alert("Pour effectuer le paiement :\n1️⃣ Contactez-moi via Mail ou SMS ci-dessous pour passer votre commande.\n2️⃣ Après ma confirmation, vous pourrez effectuer le virement.\nMerci ! 🟠");
+  alert("Pour effectuer le paiement :\n1️⃣ Contactez-moi via Mail ou SMS ci-dessous pour passer votre commande.\n2️⃣ Après ma confirmation, vous pourrez effectuer le virement.\nMerci ! 🟠");
 }
 
 function sendEmail(){
-alert("Pour passer commande par mail :\ntonynisol0612@gmail.com");
+  alert("Pour passer commande par mail :\ntonynisol0612@gmail.com");
 }
 
 function sendSMS(){
-alert("Pour passer commande par SMS :\n07 72 13 67 01");
+  alert("Pour passer commande par SMS :\n07 72 13 67 01");
 }
 
-// Header logo stable avec glow et admin
+function toggleCart(){
+  const cartEl = document.getElementById('cart');
+  cartEl.classList.toggle('collapsed');
+  document.getElementById('cart-toggle').textContent = cartEl.classList.contains('collapsed') ? '⬇️' : '⬆️';
+}
+
+// Header logo admin
 document.addEventListener('DOMContentLoaded', () => {
   const logoEl = document.getElementById('logo');
   let logo = localStorage.getItem('logo');
@@ -186,11 +165,3 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('❌ Mets un vrai lien image (http/https)');
       }
     });
-  }
-});
-
-displayProducts(products);
-renderCart();
-</script>
-</body>
-</html>
