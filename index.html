@@ -72,19 +72,25 @@ nav button:hover::after { left:100%; }
 </div>
 
 <script>
-// Authentification admin
+// Mode admin/consommateur
 let isAdmin = false;
-let adminPwd = prompt('Mot de passe admin');
-if(adminPwd === 'Foxynisol93') isAdmin = true;
+if(confirm("Voulez-vous vous connecter en mode admin ?")) {
+  let pwd = prompt("Mot de passe admin :");
+  if(pwd === "Foxynisol93") isAdmin = true;
+}
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let products = [];
 
-// Charger les produits depuis JSON
+// Charger produits depuis JSON et fusion avec localStorage
 fetch('products.json')
   .then(res => res.json())
   .then(data => {
-    products = data;
+    let stored = JSON.parse(localStorage.getItem('products')) || [];
+    products = data.map(p => {
+      let mod = stored.find(s => s.name === p.name);
+      return mod ? mod : p;
+    });
     displayProducts(products);
   })
   .catch(err => console.error('Erreur chargement products.json', err));
@@ -93,9 +99,9 @@ function displayProducts(list){
   let html='';
   list.forEach((p,i)=>{
     html+=`<div class='product'>
-      <img src='${p.img}' onclick="edit(${i},'img')">
+      <img src='${p.img}' ${isAdmin?`onclick="edit(${i},'img')"`:''}>
       <h3>${p.name}</h3>
-      <p onclick="edit(${i},'price')">€${p.price}</p>
+      <p ${isAdmin?`onclick="edit(${i},'price')"`:''}>€${p.price}</p>
       <button onclick="add(${i})">🛒 Ajouter</button>
     </div>`;
   });
@@ -107,6 +113,7 @@ function edit(i,type){
   let val = prompt('Nouvelle valeur');
   if(type==='price') products[i].price = parseFloat(val)||products[i].price;
   if(type==='img') products[i].img = val||products[i].img;
+  localStorage.setItem('products', JSON.stringify(products));
   displayProducts(products);
 }
 
@@ -176,3 +183,4 @@ renderCart();
 </script>
 </body>
 </html>
+
