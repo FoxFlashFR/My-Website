@@ -80,20 +80,23 @@ if(confirm("Voulez-vous vous connecter en mode admin ?")) {
 }
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let products = [];
+let products = JSON.parse(localStorage.getItem('products')) || [
+  {name:"Ryzen 5 3600", price:199, img:"https://via.placeholder.com/200x200?text=Ryzen+3600", category:"cpu"},
+  {name:"Ryzen 7 5800X", price:399, img:"https://via.placeholder.com/200x200?text=Ryzen+5800X", category:"cpu"},
+  {name:"Intel i7-12700", price:419, img:"https://via.placeholder.com/200x200?text=Intel+i7-12700", category:"cpu"},
+  {name:"RTX 5050", price:499, img:"https://via.placeholder.com/200x200?text=RTX+5050", category:"gpu"},
+  {name:"RTX 5060", price:699, img:"https://via.placeholder.com/200x200?text=RTX+5060", category:"gpu"},
+  {name:"Corsair DDR4 2x8", price:89, img:"https://via.placeholder.com/200x200?text=DDR4+2x8", category:"ram"},
+  {name:"Corsair DDR5 2x16", price:189, img:"https://via.placeholder.com/200x200?text=DDR5+2x16", category:"ram"},
+  {name:"Boîtier CoolerMaster", price:79, img:"https://via.placeholder.com/200x200?text=Boitier", category:"case"},
+  {name:"Alimentation 650W", price:69, img:"https://via.placeholder.com/200x200?text=Alim+650W", category:"psu"},
+  {name:"Ventirad Noctua", price:59, img:"https://via.placeholder.com/200x200?text=Ventirad", category:"aircooler"},
+  {name:"Watercooling Corsair", price:129, img:"https://via.placeholder.com/200x200?text=Watercooling", category:"watercooling"}
+];
 
-// Charger produits depuis JSON et fusion avec localStorage
-fetch('products.json')
-  .then(res => res.json())
-  .then(data => {
-    let stored = JSON.parse(localStorage.getItem('products')) || [];
-    products = data.map(p => {
-      let mod = stored.find(s => s.name === p.name);
-      return mod ? mod : p;
-    });
-    displayProducts(products);
-  })
-  .catch(err => console.error('Erreur chargement products.json', err));
+localStorage.setItem('products', JSON.stringify(products));
+
+displayProducts(products);
 
 function displayProducts(list){
   let html='';
@@ -163,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoEl = document.getElementById('logo');
   let logo = localStorage.getItem('logo');
   if(logo && logo.startsWith('http')) logoEl.src = logo;
+  else logoEl.src = 'https://via.placeholder.com/100x50?text=LOGO';
   if(isAdmin){
     logoEl.classList.add('glow');
     logoEl.style.cursor = 'pointer';
@@ -183,4 +187,3 @@ renderCart();
 </script>
 </body>
 </html>
-
