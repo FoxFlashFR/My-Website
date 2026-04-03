@@ -80,7 +80,9 @@ if(confirm("Voulez-vous vous connecter en mode admin ?")) {
 }
 
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-let products = JSON.parse(localStorage.getItem('products')) || [
+
+// Produits par défaut
+let defaultProducts = [
   {name:"Ryzen 5 3600", price:199, img:"https://via.placeholder.com/200x200?text=Ryzen+3600", category:"cpu"},
   {name:"Ryzen 7 5800X", price:399, img:"https://via.placeholder.com/200x200?text=Ryzen+5800X", category:"cpu"},
   {name:"Intel i7-12700", price:419, img:"https://via.placeholder.com/200x200?text=Intel+i7-12700", category:"cpu"},
@@ -94,6 +96,10 @@ let products = JSON.parse(localStorage.getItem('products')) || [
   {name:"Watercooling Corsair", price:129, img:"https://via.placeholder.com/200x200?text=Watercooling", category:"watercooling"}
 ];
 
+// Récupérer les produits depuis localStorage si valides
+let storedProducts = [];
+try { storedProducts = JSON.parse(localStorage.getItem('products')) || []; } catch(e){ storedProducts = []; }
+let products = storedProducts.length > 0 ? storedProducts : defaultProducts;
 localStorage.setItem('products', JSON.stringify(products));
 
 displayProducts(products);
