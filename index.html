@@ -72,11 +72,15 @@ nav button:hover::after { left:100%; }
 </div>
 
 <script>
-let isAdmin = prompt('Mot de passe admin') === 'Foxynisol93';
+// Authentification admin
+let isAdmin = false;
+let adminPwd = prompt('Mot de passe admin');
+if(adminPwd === 'Foxynisol93') isAdmin = true;
+
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let products = [];
 
-// Charger les produits depuis products.json
+// Charger les produits depuis JSON
 fetch('products.json')
   .then(res => res.json())
   .then(data => {
@@ -147,7 +151,7 @@ function toggleCart(){
   document.getElementById('cart-toggle').textContent = cartEl.classList.contains('collapsed') ? '⬇️' : '⬆️';
 }
 
-// Header logo admin
+// Admin logo
 document.addEventListener('DOMContentLoaded', () => {
   const logoEl = document.getElementById('logo');
   let logo = localStorage.getItem('logo');
@@ -165,3 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('❌ Mets un vrai lien image (http/https)');
       }
     });
+  }
+});
+
+renderCart();
+</script>
+</body>
+</html>
