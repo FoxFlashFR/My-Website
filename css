@@ -1,0 +1,242 @@
+/* ================= BODY ================= */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #050505;
+  color: white;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: #000;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 3px solid #ff6a00;
+}
+
+header h1 {
+  color: #ff6a00;
+  margin: 0;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 5px 0 0 0;
+  font-weight: 400;
+}
+
+/* ================= NAVIGATION ================= */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #111;
+  padding: 10px;
+}
+
+nav button {
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+nav button.active,
+nav button:hover {
+  background: #ff6a00;
+  color: #000;
+}
+
+/* ================= CONTROLS ================= */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  background: #111;
+}
+
+.controls input {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #222;
+  color: #fff;
+  width: 200px;
+}
+
+/* ================= PRODUCTS ================= */
+#products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product {
+  background: #111;
+  padding: 15px;
+  border-radius: 20px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(255,106,0,0.5);
+}
+
+.product img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.product h3 {
+  margin: 5px 0;
+  font-size: 1.1rem;
+}
+
+.product .price {
+  color: #ff6a00;
+  font-weight: bold;
+  margin: 5px 0;
+  font-size: 1.1rem;
+}
+
+.product button {
+  background: #ff6a00;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+  width: 100%;
+}
+
+.product button:hover {
+  background: #ffa040;
+  color: #000;
+}
+
+/* ================= CART ================= */
+#cart {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 280px;
+  height: 100%;
+  background: #0a0a0a;
+  padding: 20px;
+  border-left: 3px solid #ff6a00;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+#cart h2 {
+  margin-top: 0;
+  color: #ff6a00;
+  text-align: center;
+}
+
+#cart ul {
+  list-style: none;
+  padding: 0;
+  max-height: 50%;
+  overflow-y: auto;
+}
+
+#cart ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  font-size: 0.95rem;
+}
+
+#cart ul li button {
+  background: red;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ================= ORDER BUTTONS ================= */
+#cart .order-buttons {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#cart .order-buttons button {
+  padding: 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+#cart .order-buttons button.mail {
+  background: #ff6a00;
+  color: #000;
+}
+
+#cart .order-buttons button.mail:hover {
+  background: #ffa040;
+}
+
+#cart .order-buttons button.sms {
+  background: #00bfff;
+  color: #000;
+}
+
+#cart .order-buttons button.sms:hover {
+  background: #33ccff;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: #000;
+  text-align: center;
+  padding: 10px;
+  border-top: 2px solid #ff6a00;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  #cart {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 3px solid #ff6a00;
+    margin-top: 10px;
+  }
+
+  nav {
+    flex-direction: column;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
